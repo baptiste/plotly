@@ -56,7 +56,7 @@
 #' }
 
 
-plotly <- function(username=NULL, key=NULL, base.url="https://plot.ly") {
+plotly <- function(username=NULL, key=NULL, base.url="https://plot.ly", opts=NULL) {
   
   if (is.null(username)) {
     username <- get_credentials_file(c("username", "api_key"))$username
@@ -83,9 +83,9 @@ For more help, see https://plot.ly/R or contact <chris@plot.ly>.")
     if (is.null(kwargs$fileopt))
       kwargs$fileopt <- NULL
     url <- paste(base.url, "/clientresp", sep="")
-    options(RCurlOptions=list(sslversion=3,
+    options(RCurlOptions=c(opts, list(sslversion=3,
                               cainfo=system.file("CurlSSL", "cacert.pem",
-                                                 package="RCurl")))
+                                                 package="RCurl"))))
     respst <- postForm(url, platform="R", version=pub$version,
                        args=toJSON(args, collapse=""), un=pub$username,
                        key=pub$key, origin=origin,
